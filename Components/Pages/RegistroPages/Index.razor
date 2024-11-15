@@ -1,0 +1,94 @@
+﻿@page "/Registro/Index"
+@inject RegistroService almacenService
+@inject NavigationManager navigation
+
+<PageTitle>Registro</PageTitle>
+
+<div class="container card shadow-lg">
+    <div class="card-header text-center bi bi-bank">
+        <h3><strong>Registro</strong></h3>
+    </div>
+
+    <!-- Header -->
+    <div class="row mb-3 align-items-end">
+        <div class="col-md-3">
+            <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
+            <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
+                <option value="" disabled>Seleccionar</option>
+                <option value="Registroid">Registro ID</option>
+                <option value="Nombre">Nombre Registro</option>
+
+            </InputSelect>
+        </div>
+
+        <div class="col-md-6">
+            <label for="ValorFiltro" class="form-label"><strong>Búsqueda:</strong></label>
+            <div class="input-group">
+                <input @bind="ValorFiltro" class="form-control" placeholder="Buscar" />
+                <button @onclick="Buscar" class="btn btn-success" type="button">
+                    <span class="bi bi-search"></span> Buscar
+                </button>
+                <a href="/Registro/Create" class="btn btn-success bi bi-plus-square-fill ms-2"> Crear</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Body -->
+<div class="card-body">
+    <table class="table table-light table-bordered">
+        <thead class="table table-striped text-center table-bordered mt-3">
+            <tr>
+                <th>Registro ID</th>
+                <th>Nombre Registro</th>
+                <th>Ver</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var registro in Registro)
+            {
+                <tr>
+                    <td class="text-center">@registro.RegistroId</td>
+                    <td class="text-center">@registro.Nombre</td>
+
+                    <td class="text-center">
+                    <a href="/Registro/Details/@registro.RegistroId" class="btn btn-outline-warning bi bi-eye-fill"></a>
+                    </td>
+                    <td class="text-center">
+                        <a href="/Registro/Edit/@registro.RegistroId" class="btn btn-outline-warning bi bi-pencil-square"></a>
+                    </td>
+                    <td class="text-center">
+                        <a href="/Registro/Delete/@registro.RegistroId" class="btn btn-outline-danger bi bi-trash"></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="card-footer">
+        <p><strong>Total de Registros: </strong>@Registro?.Count</p>
+    </div>
+</div>
+
+
+
+@code {
+    public List<Registro> Registro { get; set; } = new List<Registro>();
+    public string filtro { get; set; } = string.Empty;
+    public string ValorFiltro { get; set; } = string.Empty;
+
+
+    private async Task Buscar()
+    {
+        if (ValorFiltro.Trim() != "")
+        {
+            if (filtro == "RegistroId")
+            {
+                //   Registro = await registroService.Listar(e => e.Registro.NombreRegistro.ToLower().Contains(ValorFiltro.ToLower()));
+            }
+
+        }
+
+    }
+}
