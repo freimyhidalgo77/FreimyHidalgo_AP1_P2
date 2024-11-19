@@ -1,5 +1,95 @@
-﻿ <h3>Details</h3>
+﻿@page "/Combo/Details/{ComboId:int}"
+@rendermode InteractiveServer
+@inject ComboService comboService
+@inject ComboDetalleService comboDetalleService
+@inject NavigationManager navigation
+
+<PageTitle>Combo</PageTitle>
+<div class="container">
+	<div class="card shadow-lg">
+		<div class="card-header">
+			<h3><strong>Detalles Combo</strong></h3>
+		</div>
+		<div class="card-body">
+			<h5><strong>Detalles del combo seleccionado</strong></h5>
+			<div class="mb-1">
+				<p><strong>Combo ID:</strong>@combos?.ComboId</p>
+			</div>
+			<div class="mb-1">
+				<p><strong>Fecha:</strong>@combos?.Fecha.ToShortDateString()</p>
+			</div>
+			<div class="mb-1">
+				<p><strong>Nombre:</strong>@combos?.descripcion</p>
+			</div>
+		</div>
+		<div class="mb-1">
+			<p><strong>Nombre:</strong>@combos?.precio</p>
+		</div>
+	</div>
+
+	<div class="bordered bordered-success pt-3 mt-3">
+		<table class="table table-light table-bordered">
+			<thead class="table table-striped text-center">
+				<tr>
+					<th>Articulo</th>
+					<th>Cantidad</th>
+					<th>Precio</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var detalle in comboDetalle)
+				{
+					var productoDescripcion = articulo.FirstOrDefault(p => p.ArticuloId == detalle.ArticuloId)?.Descripcion ?? "No encontrado";
+				<td>@productoDescripcion</td>
+				<td>@detalle.cantidad</td>
+				<td>@detalle.Costo.ToString("C")</td>
+
+				}
+			</tbody>
+		</table>
+	</div>
+
+	<div class="card-footer">
+		<button type="button" class="btn btn-danger bi bi-trash" @onclick="ElimnarCombo">Eliminar</button>
+		<button type="button" class="btn btn-info bi bi-arrow-90deg-left"> Volver</button>
+	</div>
+</div>
+
+
+
 
 @code {
 
+	[Parameter]
+	public int ComboId { get; set; }
+	public Combo? combo;
+	public List<ComboDetalle> clienteDetalle { get; set; } = new();
+	public List<Articulos> Productos { get; set; } = new();
+	public string mensaje { get; set; } = string.Empty;
+
+	protected override Task OnInitializedAsync()
+	{
+		return combo();
+	}
+
+	public async Task combo()
+	{
+		combo = await comboService.BuscarConDetalles(comboid);
+		if (combo != null)
+		{
+			clienteDetalle = combo.comboDetalle.ToList();
+			Productos = await comboDetalleService.Listar(C => true);
+		}
+
+	}
+
+
+	public void Volver()
+	{
+		navigation.NavigateTo("/Combo/Index");
+	}
+
+
+
 }
+

@@ -1,5 +1,5 @@
-﻿@page "/Registro/Index"
-@inject RegistroService almacenService
+﻿@page "/Combo/Index"
+@inject ComboDetalleService comboDetalleService
 @inject NavigationManager navigation
 
 <PageTitle>Registro</PageTitle>
@@ -15,8 +15,8 @@
             <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
             <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
                 <option value="" disabled>Seleccionar</option>
-                <option value="Registroid">Registro ID</option>
-                <option value="Nombre">Nombre Registro</option>
+                <option value="ComboId">Registro ID</option>
+                <option value="Descripcion">Descripcion</option>
 
             </InputSelect>
         </div>
@@ -28,7 +28,7 @@
                 <button @onclick="Buscar" class="btn btn-success" type="button">
                     <span class="bi bi-search"></span> Buscar
                 </button>
-                <a href="/Registro/Create" class="btn btn-success bi bi-plus-square-fill ms-2"> Crear</a>
+                <a href="/Combo/Create" class="btn btn-success bi bi-plus-square-fill ms-2"> Crear</a>
             </div>
         </div>
     </div> 
@@ -39,42 +39,46 @@
     <table class="table table-light table-bordered">
         <thead class="table table-striped text-center table-bordered mt-3">
             <tr>
-                <th>Registro ID</th>
-                <th>Nombre Registro</th>
+                <th>Combo ID</th>
+                <th>Fecha</th>
+                <th>Descripcion</th>
+                <th>Precio</th>
                 <th>Ver</th>
                 <th>Editar</th>
                 <th>Eliminar</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var registro in Registro)
+            @foreach (var combo in combos)
             {
                 <tr>
-                    <td class="text-center">@registro.RegistroId</td>
-                    <td class="text-center">@registro.Nombre</td>
-
+                    <td class="text-center">@combo.ComboId</td>
+                    <td class="text-center">@combo.Fecha</td>
+                    <td class="text-center">@combo.descripcion</td>
+                    <td class="text-center">@combo.precio</td>
+             
                     <td class="text-center">
-                    <a href="/Registro/Details/@registro.RegistroId" class="btn btn-outline-warning bi bi-eye-fill"></a>
+                    <a href="/Registro/Details/@combo.ComboId" class="btn btn-outline-warning bi bi-eye-fill"></a>
                     </td>
                     <td class="text-center">
-                        <a href="/Registro/Edit/@registro.RegistroId" class="btn btn-outline-warning bi bi-pencil-square"></a>
+                        <a href="/Registro/Edit/@combo.ComboId" class="btn btn-outline-warning bi bi-pencil-square"></a>
                     </td>
                     <td class="text-center">
-                        <a href="/Registro/Delete/@registro.RegistroId" class="btn btn-outline-danger bi bi-trash"></a>
+                        <a href="/Registro/Delete/@combo.ComboId" class="btn btn-outline-danger bi bi-trash"></a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
     <div class="card-footer">
-        <p><strong>Total de Registros: </strong>@Registro?.Count</p>
+        <p><strong>Total de Registros: </strong>@combos?.Count</p>
     </div>
 </div>
 
 
 
 @code {
-    public List<Registro> Registro { get; set; } = new List<Registro>();
+    public List<Combo> combos { get; set; } = new List<Combo>();
     public string filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
 
