@@ -1,6 +1,187 @@
-﻿<h3>Create</h3>
+﻿@page "/Combo/Create"
+@rendermode InteractiveServer
+@inject ComboService comboService
+@inject ComboDetalleService comboDetalleService
+@inject NavigationManager navigation
+@inject Context dbContext
+@inject ToastService toastService
+
+<PageTitle>Combo</PageTitle>
+<EditForm Model="Combo" OnValidSubmit="Crear">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h1><strong>Crear Combo</strong></h1>
+            </div>
+            <div class="card-body">
+
+                <label class="form-label" for="ClienteId"><strong>Combo ID:</strong></label>
+                <InputNumber id="ComboId" class="form-control" @bind-Value="Combo.ComboId" readonly></InputNumber>
+
+                <label class="form-label" for="Fecha"><strong>Fecha:</strong></label>
+                <InputDate id="Fecha" class="form-control" @bind-Value="Combo.Fecha"></InputDate>
+                <ValidationMessage For="@(() => Combo.Fecha)" />
+
+
+                <label class="form-label" for="Descripcion"><strong>Descripcion</strong></label>
+                <InputText id="Descripcion" class="form-control" @bind-Value="Combo.descripcion"></InputText>
+                <ValidationMessage For="@(() => Combo.descripcion)" />
+
+                <label class="form-label" for="Precio"><strong>Precio</strong></label>
+                <InputNumber id="Precio" class="form-control" @bind-Value="Combo.precio"></InputNumber>
+                <ValidationMessage For="@(() => Combo.precio)" />
+
+            </div>
+        </div>
+    </div>
+
+
+                 <div class="container">
+                    <div class="card shadow-lg">
+                        <div class="card header text-center">
+                            <h5><strong>Detalles del articulo seleccionado</strong></h5>
+                        </div>
+
+                        <div class="border border-success p-3 mt-3">
+                            <h3>Combo Detalles</h3>
+
+
+                            <SeleccionarArticuloPicker ListaArticulo="articuloList"
+                            ArticuloId="ComboDetalle.ArticuloId"
+                            Cantidad="ComboDetalle.ComboId"
+                            ArticuloSeleccionado="AgregarProducto"/>
+
+
+                            <hr/>
+                            <table class="table table-light">
+                                <thead class="table table-stripped">
+                                    <tr class="text-center">
+                                        <th>Articulo ID</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio</th>
+                                        <th>Remover</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach(var detalle in Combo.ComboDetalle)
+                                    {
+                                        <tr class="text-center">
+                                            <td class="ps-3">@detalle.ComboId</td>
+                                            <td class="ps-3">@detalle.cantidad</td>
+                                            <td class="ps-3">@detalle.Costo</td>
+                                            <td class="ps-3">
+                                                <button type="button" class="btn btn-outline-danger bi bi-trash"
+                                                @onclick="()=>RemoverDetalle(detalle)">
+                                                </button>
+
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-info text-white bi bi-90deg-left">Volver</button>
+                            <button type="submit" class="btn btn-success text-white bi bi-floppy-fill" @onclick=Crear>Crear</button>
+
+
+
+                 
+
+            </div>
+        </div>
+    </div>
+
+
+
+</EditForm>
+
 
 @code {
 
+    public Combo Combo { get; set; } = new Combo();
+    public List<Combo> comboList { get; set; } = new List<Combo>();
+    public ComboDetalle ComboDetalle { get; set; } = new ComboDetalle();
+    public List<ComboDetalle> comboDetalleList { get; set; } = new List<ComboDetalle>();
+    public List<Articulos> articuloList { get; set; } = new List<Articulos>();
+    public Articulos Articulos { get; set; } = new Articulos();
+    public decimal Total { get; set; }
+    public string mensaje { get; set; } = string.Empty;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        comboList = await comboService.Listar(c => c.ComboId > 0);
+        articuloList = await comboDetalleService.Listar(p => p.ArticuloId > 0);
+
+
+    }
+
+   private async Task AgregarProducto((Articulos articulo, int Cantidad) selection)
+    {
+       /* var ProductoExistente = Articulos.ComboDetalle.FirstOrDefault(A => A.ProductoId == selection.articulo.ComboId);
+       
+        var ComboDetalle = new ComboDetalle
+            {
+                ArticuloId = selection.articulo.ArticuloId,
+                Cantidad = selection.Cantidad,
+                Costo = selection.articulo.costo,
+            };
+        
+        Combo.ComboDetalle.Add(comboDetalle);
+        comboDetalle = new ComboDetalle();
+        await Task.CompletedTask;*/
+
+    
+          
+      }
+
+    private async Task Crear()
+    {
+
+        if (!Combo.ComboDetalle.Any())
+        {
+            toastService.Notify(new(ToastType.Primary, "Debe al menos seleccionar un articulo!"));
+            return;
+        }
+        
+        toastService.Notify(new(ToastType.Primary, "Combo guardado con exito!"));
+        var crear = await comboService.Guardar(Combo);
+        Combo = new Combo();
+
+        if (crear)
+        {
+            
+            navigation.NavigateTo("/Combo/Index");
+        }
+        else
+        {
+            toastService.Notify(new(ToastType.Danger, "Error al guardar!"));
+               
+        }
+       
+      
+    }
+
+
+    public void RemoverDetalle(ComboDetalle detalle)
+    {
+        Combo.ComboDetalle.Remove(detalle);
+        Combo.ComboId = detalle.ComboId;
+        ComboDetalle.cantidad = detalle.cantidad;
+        ComboDetalle.Costo = detalle.Costo;
+    }
+
+    public void Volver()
+    {
+        navigation.NavigateTo("/Combo/Index");
+    }
+
+
+
+
 }
- 
