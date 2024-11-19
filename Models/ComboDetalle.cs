@@ -11,19 +11,19 @@ namespace FreimyHidalgo_AP1_P2.Models
 
         [ForeignKey("Combo")]
         public int ComboId { get; set; }
-        Combo? Combos { get; set; }
+        public Combo? Combos { get; set; }
 
 
         [ForeignKey("Articulos")]
         public int ArticuloId { get; set; }
-        Articulos? Articulos { get; set; }
+        public  Articulos? Articulos { get; set; }
 
 
         [Required(ErrorMessage = "Es obligatorio introducir una cantidad ")]
-        public int cantidad { get; set; }
+        public int Cantidad { get; set; }
 
         [Required(ErrorMessage = "Es obligatorio introducir un precio")]
-        public decimal Costo { get; set; }
+        public decimal costo { get; set; }
 
 
 

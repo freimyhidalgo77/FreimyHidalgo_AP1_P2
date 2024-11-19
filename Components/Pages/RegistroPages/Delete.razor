@@ -3,6 +3,7 @@
 @inject ComboService comboService
 @inject ComboDetalleService comboDetalleService
 @inject NavigationManager navigation
+@inject ToastService toastService
 
 <PageTitle>Combo</PageTitle>
 <div class="container">
@@ -21,7 +22,6 @@
 			<div class="mb-1">
 				<p><strong>Nombre:</strong>@combos?.descripcion</p>
 			</div>
-		</div>
 		<div class="mb-1">
 			<p><strong>Nombre:</strong>@combos?.precio</p>
 		</div>
@@ -40,20 +40,22 @@
 				@foreach (var detalle in comboDetalle)
 				{
 					var productoDescripcion = articulo.FirstOrDefault(p => p.ArticuloId == detalle.ArticuloId)?.Descripcion ?? "No encontrado";
-					<td>@productoDescripcion</td>
-					<td>@detalle.cantidad</td>
-					<td>@detalle.Costo.ToString("C")</td>
+					
+					<td>@detalle.Cantidad</td>
+					<td>@detalle.costo.ToString("C")</td>
+				
 
-					}
-				</tbody>
-			</table>
-		</div>
-
-		<div class="card-footer">
-			<button type="button" class="btn btn-danger bi bi-trash" @onclick="ElimnarCombo">Eliminar</button>
-			<button type="button" class="btn btn-info bi bi-arrow-90deg-left"> Volver</button>
-		</div>
+				}
+			</tbody>
+		</table>
 	</div>
+
+	<div class="card-footer">
+		<button type="button" class="btn btn-danger bi bi-trash" @onclick="ElimnarCombo">Eliminar</button>
+		<button type="button" class="btn btn-info bi bi-arrow-90deg-left" @onclick=Volver> Volver</button>
+	</div>
+</div>
+</div>
 
 
 
@@ -74,12 +76,12 @@
 
 	public async Task Combos()
 	{
-		/*combos = await comboService.BuscarConDetalles(ComboId);
+		combos = await comboService.BuscarConDetalles(ComboId);
 		if (combos != null)
 		{
 			comboDetalle = combos.ComboDetalle.ToList();
 			articulo = await comboDetalleService.Listar(C => true);
-		}*/
+		}
 
 	}
 
@@ -92,10 +94,11 @@
 			if (eliminado)
 			{
 				navigation.NavigateTo("/Combo/Index");
+				toastService.Notify(new(ToastType.Danger, "Combo eliminado", "El combo se ha eliminado con exito!"));
 			}
 			else
 			{
-				mensaje = "No se pudo eliminar el cliente";
+				toastService.Notify(new(ToastType.Danger, "No se pudo eliminar la solicitud"));
 			}
 		}
 
@@ -103,7 +106,7 @@
 
 	public void Volver()
 	{
-		navigation.NavigateTo("/Clientes/Index");
+		navigation.NavigateTo("/Combo/Index");
 	}
 
 
@@ -113,7 +116,7 @@
 
 
 
-}
+
 
 
 

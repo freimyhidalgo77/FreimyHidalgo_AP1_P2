@@ -20,9 +20,9 @@ namespace FreimyHidalgo_AP1_P2.DAL
                 base.OnModelCreating(modelBuilder);
                 modelBuilder.Entity<Articulos>().HasData(new List<Articulos>()
         {
-            new Articulos(){ArticuloId=1, Descripcion= "Memoria RAM ",Precio= 1200, },
-            new Articulos(){ArticuloId=2, Descripcion= "Monitor ",Precio= 2000, },
-            new Articulos(){ArticuloId=3, Descripcion= "CPU ",Precio= 1250, },
+            new Articulos(){ArticuloId=1, Descripcion= "Memoria RAM " ,Precio= 1200, Costo = 3400, existencia = 30},
+            new Articulos(){ArticuloId=2, Descripcion= "Monitor ",Precio= 2000, Costo = 5000, existencia = 19 }, 
+            new Articulos(){ArticuloId=3, Descripcion= "CPU ",Precio= 1250, Costo = 4300, existencia = 10 },
 
         });
             }

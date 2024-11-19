@@ -19,9 +19,10 @@ namespace FreimyHidalgo_AP1_P2.Migrations
                 {
                     ArticuloId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    disponibilidad = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Costo = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    existencia = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,7 +38,7 @@ namespace FreimyHidalgo_AP1_P2.Migrations
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
                     descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    vendido = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Vendido = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -52,12 +53,18 @@ namespace FreimyHidalgo_AP1_P2.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ComboId = table.Column<int>(type: "int", nullable: false),
                     ArticuloId = table.Column<int>(type: "int", nullable: false),
-                    cantidad = table.Column<int>(type: "int", nullable: false),
-                    Costo = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Cantidad = table.Column<int>(type: "int", nullable: false),
+                    costo = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ComboDetalles", x => x.DetalleId);
+                    table.ForeignKey(
+                        name: "FK_ComboDetalles_Articulo_ArticuloId",
+                        column: x => x.ArticuloId,
+                        principalTable: "Articulo",
+                        principalColumn: "ArticuloId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ComboDetalles_Combo_ComboId",
                         column: x => x.ComboId,
@@ -68,13 +75,18 @@ namespace FreimyHidalgo_AP1_P2.Migrations
 
             migrationBuilder.InsertData(
                 table: "Articulo",
-                columns: new[] { "ArticuloId", "Descripcion", "Precio", "disponibilidad" },
+                columns: new[] { "ArticuloId", "Costo", "Descripcion", "Precio", "existencia" },
                 values: new object[,]
                 {
-                    { 1, "Tarjeta RAM ", 1200m, null },
-                    { 2, "Monitor ", 2000m, null },
-                    { 3, "CPU ", 1250m, null }
+                    { 1, 3400m, "Memoria RAM ", 1200m, 30 },
+                    { 2, 5000m, "Monitor ", 2000m, 19 },
+                    { 3, 4300m, "CPU ", 1250m, 10 }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ComboDetalles_ArticuloId",
+                table: "ComboDetalles",
+                column: "ArticuloId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ComboDetalles_ComboId",
@@ -86,10 +98,10 @@ namespace FreimyHidalgo_AP1_P2.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Articulo");
+                name: "ComboDetalles");
 
             migrationBuilder.DropTable(
-                name: "ComboDetalles");
+                name: "Articulo");
 
             migrationBuilder.DropTable(
                 name: "Combo");

@@ -30,15 +30,17 @@ namespace FreimyHidalgo_AP1_P2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ArticuloId"));
 
+                    b.Property<decimal>("Costo")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("Descripcion")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Precio")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("disponibilidad")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("existencia")
+                        .HasColumnType("int");
 
                     b.HasKey("ArticuloId");
 
@@ -48,20 +50,26 @@ namespace FreimyHidalgo_AP1_P2.Migrations
                         new
                         {
                             ArticuloId = 1,
-                            Descripcion = "Tarjeta RAM ",
-                            Precio = 1200m
+                            Costo = 3400m,
+                            Descripcion = "Memoria RAM ",
+                            Precio = 1200m,
+                            existencia = 30
                         },
                         new
                         {
                             ArticuloId = 2,
+                            Costo = 5000m,
                             Descripcion = "Monitor ",
-                            Precio = 2000m
+                            Precio = 2000m,
+                            existencia = 19
                         },
                         new
                         {
                             ArticuloId = 3,
+                            Costo = 4300m,
                             Descripcion = "CPU ",
-                            Precio = 1250m
+                            Precio = 1250m,
+                            existencia = 10
                         });
                 });
 
@@ -76,15 +84,15 @@ namespace FreimyHidalgo_AP1_P2.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("Vendido")
+                        .HasColumnType("bit");
+
                     b.Property<string>("descripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("precio")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("vendido")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ComboId");
 
@@ -102,16 +110,18 @@ namespace FreimyHidalgo_AP1_P2.Migrations
                     b.Property<int>("ArticuloId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("int");
+
                     b.Property<int>("ComboId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Costo")
+                    b.Property<decimal>("costo")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("cantidad")
-                        .HasColumnType("int");
-
                     b.HasKey("DetalleId");
+
+                    b.HasIndex("ArticuloId");
 
                     b.HasIndex("ComboId");
 
@@ -120,11 +130,21 @@ namespace FreimyHidalgo_AP1_P2.Migrations
 
             modelBuilder.Entity("FreimyHidalgo_AP1_P2.Models.ComboDetalle", b =>
                 {
-                    b.HasOne("FreimyHidalgo_AP1_P2.Models.Combo", null)
+                    b.HasOne("FreimyHidalgo_AP1_P2.Models.Articulos", "Articulos")
+                        .WithMany()
+                        .HasForeignKey("ArticuloId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FreimyHidalgo_AP1_P2.Models.Combo", "Combos")
                         .WithMany("ComboDetalle")
                         .HasForeignKey("ComboId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Articulos");
+
+                    b.Navigation("Combos");
                 });
 
             modelBuilder.Entity("FreimyHidalgo_AP1_P2.Models.Combo", b =>

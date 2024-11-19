@@ -19,7 +19,7 @@ namespace FreimyHidalgo_AP1_P2.Models
         [Required(ErrorMessage = "Campo precio obligatorio")]
         public decimal precio { get; set; }
 
-        public string? vendido { get; set; }
+        public bool Vendido { get; set; }
 
         [ForeignKey("ComboId")]
 

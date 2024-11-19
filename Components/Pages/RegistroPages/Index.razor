@@ -1,4 +1,5 @@
 ﻿@page "/Combo/Index"
+@inject ComboService comboService
 @inject ComboDetalleService comboDetalleService
 @inject NavigationManager navigation
 
@@ -17,8 +18,7 @@
                 <option value="" disabled>Seleccionar</option>
                 <option value="ComboId">Registro ID</option>
                 <option value="descrpcion">Descripcion</option>
-                <option value="precio">Precio</option>
-
+              
             </InputSelect>
         </div>
 
@@ -43,8 +43,8 @@
                 <th>Combo ID</th>
                 <th>Fecha</th>
                 <th>Descripcion</th>
-                <th>Precio</th>
-                <th>Ver</th>
+                <th>Monto</th>
+                <th>Vendido</th>
                 <th>Editar</th>
                 <th>Eliminar</th>
             </tr>
@@ -57,9 +57,9 @@
                     <td class="text-center">@combo.Fecha</td>
                     <td class="text-center">@combo.descripcion</td>
                     <td class="text-center">@combo.precio</td>
-             
-                    <td class="text-center">
-                    <a href="/Combo/Details/@combo.ComboId" class="btn btn-outline-warning bi bi-eye-fill"></a>
+                    
+                    <td>
+                        @(combo.Vendido ? "Sí" : "No")
                     </td>
                     <td class="text-center">
                         <a href="/Combo/Edit/@combo.ComboId" class="btn btn-outline-warning bi bi-pencil-square"></a>
@@ -80,15 +80,25 @@
 
 @code {
     public List<Combo> combos { get; set; } = new List<Combo>();
+    public List<Articulos> ListArticulos { get; set; } = new List<Articulos>();
     public string filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        combos = await comboService.Listar(c => c.ComboId > 0);
+
+       
+
+    }
 
 
     private async Task Buscar()
     {
         if (ValorFiltro.Trim() != "")
         {
-            if (filtro == "RegistroId")
+            if (filtro == "RegistroI")
             {
                 //   Registro = await registroService.Listar(e => e.Registro.NombreRegistro.ToLower().Contains(ValorFiltro.ToLower()));
             }

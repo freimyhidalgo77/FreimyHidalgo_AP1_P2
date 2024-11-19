@@ -16,7 +16,8 @@ namespace FreimyHidalgo_AP1_P2.Service
             await using var context = await DbFactory.CreateDbContextAsync();
             return await context.Articulo.Where(criterio).ToListAsync();
         }
-        public async Task<bool> Agregar(int articuloId, int cantidad)
+
+     /*   public async Task<bool> Agregar(int articuloId, int cantidad)
         {
             await using var contexto = await DbFactory.CreateDbContextAsync();
             if (cantidad <= 0)
@@ -33,7 +34,7 @@ namespace FreimyHidalgo_AP1_P2.Service
                 return true;
             }
             return false;
-        }
+        }*/
 
     }
 }

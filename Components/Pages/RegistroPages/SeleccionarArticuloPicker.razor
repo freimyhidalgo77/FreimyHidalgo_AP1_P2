@@ -1,12 +1,11 @@
-﻿@inject ToastService toastService
-<div class="col-auto input-group align-items-center">
+﻿<div class="col-auto input-group align-items-center">
 
     <InputSelect class="form-select" @bind-Value="ArticuloId">
         <option disabled value="0">Seleccione un articulo</option>
         @foreach (var articulo in ListaArticulo)
         {
             <option value="@articulo.ArticuloId">
-                @articulo.Descripcion --- $ @(articulo.Precio)-- $
+                @articulo.ArticuloId -- @articulo.Descripcion -- (@articulo.existencia )
             </option>
         }
     </InputSelect>
@@ -14,12 +13,17 @@
 
     <label class="col-form-label input-group-text">Cantidad</label>
     <InputNumber class="form-control" @bind-Value="Cantidad"></InputNumber>
+
+    <label class="col-form-label input-group-text">Precio</label>
+    <InputNumber class="form-control" @bind-Value="Precio"  placeholder="0.00$" readonly></InputNumber>
     <button type="button" class="btn btn-success bi bi-plus-square" @onclick="ElegirArticulo"></button>
 </div>
+
 @if (!string.IsNullOrEmpty(mensaje))
 {
     <div class="alert alert-danger">@mensaje</div>
 }
+
 
 @code {
     [Parameter]
@@ -32,9 +36,13 @@
     public int Cantidad { get; set; }
 
     [Parameter]
+    public decimal Precio { get; set; }
+
+    [Parameter]
     public EventCallback<(Articulos articulo, int Cantidad)> ArticuloSeleccionado { get; set; }
 
-    public string? mensaje { get; set; } = string.Empty;
+    public string mensaje { get; set; } = string.Empty;
+
 
     private async Task ElegirArticulo()
     {
@@ -43,9 +51,9 @@
             var ArticuloElegido = ListaArticulo.Single(a => a.ArticuloId == ArticuloId);
             if (ArticuloElegido != null)
             {
-                if (ArticuloElegido.disponibilidad == null)
+                if (ArticuloElegido.existencia <  Cantidad)
                 {
-                    toastService.Notify(new(ToastType.Danger, "Combo no disponible"));
+                    mensaje =  "La cantidad de articulos seleccionados no puede exceder la existencia";
                 }
                 else
                 {
@@ -55,12 +63,17 @@
             else
             {
 
-                toastService.Notify(new(ToastType.Warning, "Debe seleccionar un articulo!"));
+                mensaje = "Debe seleccionar un articulo!";
             }
 
         }
 
     }
+
+
+ 
+
+
 }
 
 

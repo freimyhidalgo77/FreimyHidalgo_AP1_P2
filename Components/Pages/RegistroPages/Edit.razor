@@ -5,6 +5,7 @@
 @inject ComboDetalleService comboDetalleService
 @inject NavigationManager navigation
 @inject Context dbContext
+@inject ToastService toastService
 
 <PageTitle>Combo</PageTitle>
 <EditForm Model="Combo" OnValidSubmit="Modificar">
@@ -29,9 +30,14 @@
                 <InputText id="Descripcion" class="form-control" @bind-Value="Combo.descripcion"></InputText>
                 <ValidationMessage For="@(() => Combo.descripcion)" />
 
-                <label class="form-label" for="Precio"><strong>Precio</strong></label>
-                <InputNumber id="Precio" class="form-control" @bind-Value="Combo.precio"></InputNumber>
+                <label class="form-label" for="Precio"><strong>Monto</strong></label>
+                <InputNumber id="Precio" class="form-control" @bind-Value="Combo.precio" readonly></InputNumber>
                 <ValidationMessage For="@(() => Combo.precio)" />
+
+                <label class="form-label" for="Vendido"><strong>¿Vendido?</strong></label>
+                <InputCheckbox id="Vendido" class="form-check-input" @bind-Value="Combo.Vendido" />
+                <ValidationMessage For="@(() => Combo.Vendido)" />
+
 
             </div>
         </div>
@@ -40,54 +46,55 @@
 
 
 
-                <div class="container">
-                    <div class="card shadow-lg">
-                        <div class="card header text-center">
-                            <h5><strong>Detalles del articulo seleccionado</strong></h5>
-                        </div>
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card header text-center">
+                <h5><strong>Detalles del articulo seleccionado</strong></h5>
+            </div>
 
-                        <div class="border border-success p-3 mt-3">
-                            <h3>Cliente Detalles</h3>
-
-
-                            <SeleccionarArticuloPicker ListaArticulo="articuloList"
-                                                       ArticuloId="ComboDetalle.ArticuloId"
-                                                       Cantidad="ComboDetalle.ComboId"
-                                                       ArticuloSeleccionado="AgregarProducto" />
+            <div class="border border-success p-3 mt-3">
+                <h3>Cliente Detalles</h3>
 
 
-                            <hr />
-                            <table class="table table-light">
-                                <thead class="table table-stripped">
-                                    <tr class="text-center">
-                                        <th>Articulo ID</th>
-                                        <th>Cantidad</th>
-                                        <th>Precio</th>
-                                        <th>Remover</th>
-                                    </tr>
-                                </thead>
+                <SeleccionarArticuloPicker ListaArticulo="articuloList"
+                Cantidad="ComboDetalle.Cantidad"
+                Precio="ComboDetalle.costo"
+                ArticuloId="ComboDetalle.ArticuloId"
+                ArticuloSeleccionado="AgregarProducto" />
 
-                                <tbody>
-                                    @foreach (var detalle in Combo.ComboDetalle)
-                                    {
-                                        <tr class="text-center">
-                                            <td class="ps-3">@detalle.ComboId</td>
-                                            <td class="ps-3">@detalle.cantidad</td>
-                                            <td class="ps-3">@detalle.Costo</td>
-                                            <td class="ps-3">
-                                                <button type="button" class="btn btn-outline-danger bi bi-trash"
-                                                        @onclick="()=>RemoverDetalle(detalle)">
-                                                </button>
 
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="card-footer">
-                            <button type="button" class="btn btn-info text-white bi bi-90deg-left">Volver</button>
-                            <button type="submit" class="btn btn-success text-white bi bi-floppy-fill" @onclick=Modificar>Modificar</button>
+                <hr />
+                <table class="table table-light">
+                    <thead class="table table-stripped">
+                        <tr class="text-center">
+                            <th>Articulo ID</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Remover</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var detalle in Combo.ComboDetalle)
+                        {
+                            <tr class="text-center">
+                                <td class="ps-3">@detalle.ComboId</td>
+                                <td class="ps-3">@detalle.Cantidad</td>
+                                <td class="ps-3">@detalle.costo</td>
+                                <td class="ps-3">
+                                    <button type="button" class="btn btn-outline-danger bi bi-trash"
+                                    @onclick="()=>RemoverDetalle(detalle)">
+                                    </button>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-info text-white bi bi-90deg-left">Volver</button>
+                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill" @onclick=Modificar>Modificar</button>
 
             </div>
         </div>
@@ -100,6 +107,8 @@
 
 @code {
 
+    [Parameter]
+    public int ComboId { get; set; }
     public Combo Combo { get; set; } = new Combo();
     public List<Combo> comboList { get; set; } = new List<Combo>();
     public ComboDetalle ComboDetalle { get; set; } = new ComboDetalle();
@@ -108,35 +117,49 @@
     public Articulos Articulos { get; set; } = new Articulos();
     public decimal Total { get; set; }
     public string mensaje { get; set; } = string.Empty;
-  
+
 
 
     protected override async Task OnInitializedAsync()
     {
-        //Combo = await comboService.BuscarConDetalles(ComboId);
+        Combo = await comboService.BuscarConDetalles(ComboId);
         articuloList = await comboDetalleService.Listar(p => p.ArticuloId > 0);
 
 
     }
 
+    public void MontoCalculado()
+    {
+        Combo.precio = Combo.ComboDetalle.Sum(d => d.costo);
+    }
+
+
     private async Task AgregarProducto((Articulos articulo, int Cantidad) selection)
     {
-        /*  var ProductoExistente = Articulos.ComboDetalle.FirstOrDefault(A => A.ProductoId == selection.articulo.ComboId);
-         *
-          var comboDetalle = new ComboDetalle
-              {
-                  ArticuloId = selection.articulo.ArticuloId,
-                  cantidad = selection.Cantidad,
-                  Costo = selection.articulo.costo;
-              };
+        var ProductoExistente = Combo.ComboDetalle.FirstOrDefault(A => A.ArticuloId == selection.articulo.ArticuloId);
 
-          Combo.ComboDetalle.Add(comboDetalle);
-          comboDetalle = new ComboDetalle();
-          await Task.CompletedTask;*/
+        if (ProductoExistente != null)
+        {
+            ProductoExistente.Cantidad += selection.Cantidad;
+            ProductoExistente.costo = ProductoExistente.Articulos.Precio * ProductoExistente.Cantidad;
+        }
+        else
+        {
+            var ComboDetalle = new ComboDetalle
+                {
+                    ArticuloId = selection.articulo.ArticuloId,
+                    Cantidad = selection.Cantidad,
+                    costo = selection.articulo.Precio * selection.Cantidad,
+                };
+            Combo.ComboDetalle.Add(ComboDetalle);
+        }
 
+        MontoCalculado();
+        await Task.CompletedTask;
 
 
     }
+
 
     private async Task Modificar()
     {
@@ -147,12 +170,13 @@
             return;
         }
        
+        toastService.Notify(new(ToastType.Primary, "Combo modificado", "Se ha modificado el combo correctamente!"));
         var crear = await comboService.Guardar(Combo);
         Combo = new Combo();
 
         if (crear)
         {
-            mensaje = "Se ha creado correctamente el combo";
+           
             navigation.NavigateTo("/Combo/Index");
         }
         else
@@ -168,8 +192,8 @@
     {
         Combo.ComboDetalle.Remove(detalle);
         Combo.ComboId = detalle.ComboId;
-        ComboDetalle.cantidad = detalle.cantidad;
-        ComboDetalle.Costo = detalle.Costo;
+        ComboDetalle.Cantidad = detalle.Cantidad;
+        ComboDetalle.costo = detalle.costo;
     }
 
     public void Volver()

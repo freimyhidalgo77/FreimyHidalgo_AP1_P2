@@ -9,15 +9,13 @@ namespace FreimyHidalgo_AP1_P2.Models
         [Key]
         public int ArticuloId { get; set; }
 
-    
-        [Required(ErrorMessage ="Campo descripcion obligatorio")]
         public string? Descripcion { get; set; }
 
-        [Required(ErrorMessage ="Campo precio obligatorio")]
-        public decimal? Precio { get; set; }
+        public decimal Precio { get; set; }
 
-        
-       public string? disponibilidad { get; set; }
+        public decimal Costo { get; set; }
+
+        public int existencia { get; set; }
 
 
 
