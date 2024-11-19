@@ -123,19 +123,18 @@
 
    private async Task AgregarProducto((Articulos articulo, int Cantidad) selection)
     {
-       /* var ProductoExistente = Articulos.ComboDetalle.FirstOrDefault(A => A.ProductoId == selection.articulo.ComboId);
+       var ProductoExistente = Combo.ComboDetalle.FirstOrDefault(A => A.ArticuloId == selection.articulo.ArticuloId);
        
         var ComboDetalle = new ComboDetalle
             {
                 ArticuloId = selection.articulo.ArticuloId,
-                Cantidad = selection.Cantidad,
-                Costo = selection.articulo.costo,
+                cantidad = selection.Cantidad,
+                Costo = selection.articulo.ArticuloId,
             };
         
-        Combo.ComboDetalle.Add(comboDetalle);
-        comboDetalle = new ComboDetalle();
-        await Task.CompletedTask;*/
-
+        Combo.ComboDetalle.Add(ComboDetalle);
+        ComboDetalle = new ComboDetalle();
+        await Task.CompletedTask;
     
           
       }
@@ -185,3 +184,9 @@
 
 
 }
+
+
+
+
+
+
