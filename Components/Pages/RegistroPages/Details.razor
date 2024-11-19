@@ -13,17 +13,17 @@
 		<div class="card-body">
 			<h5><strong>Detalles del combo seleccionado</strong></h5>
 			<div class="mb-1">
-				<p><strong>Combo ID:</strong>@combos?.ComboId</p>
+				<p><strong>Combo ID:</strong>@combo?.ComboId</p>
 			</div>
 			<div class="mb-1">
-				<p><strong>Fecha:</strong>@combos?.Fecha.ToShortDateString()</p>
+				<p><strong>Fecha:</strong>@combo?.Fecha.ToShortDateString()</p>
 			</div>
 			<div class="mb-1">
-				<p><strong>Nombre:</strong>@combos?.descripcion</p>
+				<p><strong>Nombre:</strong>@combo?.descripcion</p>
 			</div>
 		</div>
 		<div class="mb-1">
-			<p><strong>Nombre:</strong>@combos?.precio</p>
+			<p><strong>Nombre:</strong>@combo?.precio</p>
 		</div>
 	</div>
 
@@ -40,9 +40,9 @@
 				@foreach (var detalle in comboDetalle)
 				{
 					var productoDescripcion = articulo.FirstOrDefault(p => p.ArticuloId == detalle.ArticuloId)?.Descripcion ?? "No encontrado";
-				<td>@productoDescripcion</td>
-				<td>@detalle.cantidad</td>
-				<td>@detalle.Costo.ToString("C")</td>
+					<td>@productoDescripcion</td>
+					<td>@detalle.cantidad</td>
+					<td>@detalle.Costo.ToString("C")</td>
 
 				}
 			</tbody>
@@ -50,7 +50,6 @@
 	</div>
 
 	<div class="card-footer">
-		<button type="button" class="btn btn-danger bi bi-trash" @onclick="ElimnarCombo">Eliminar</button>
 		<button type="button" class="btn btn-info bi bi-arrow-90deg-left"> Volver</button>
 	</div>
 </div>
@@ -63,21 +62,22 @@
 	[Parameter]
 	public int ComboId { get; set; }
 	public Combo? combo;
-	public List<ComboDetalle> clienteDetalle { get; set; } = new();
+	public List<ComboDetalle> comboDetalle { get; set; } = new();
+	public List<Articulos> articulo { get; set; } = new List<Articulos>();
 	public List<Articulos> Productos { get; set; } = new();
 	public string mensaje { get; set; } = string.Empty;
 
 	protected override Task OnInitializedAsync()
 	{
-		return combo();
+		return Combos();
 	}
 
-	public async Task combo()
+	public async Task Combos()
 	{
-		combo = await comboService.BuscarConDetalles(comboid);
+		combo = await comboService.BuscarConDetalles(ComboId);
 		if (combo != null)
 		{
-			clienteDetalle = combo.comboDetalle.ToList();
+			comboDetalle = combo.ComboDetalle.ToList();
 			Productos = await comboDetalleService.Listar(C => true);
 		}
 

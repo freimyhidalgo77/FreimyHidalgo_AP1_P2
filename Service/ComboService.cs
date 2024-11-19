@@ -61,14 +61,14 @@ namespace FreimyHidalgo_AP1_P2.Service
         }
 
 
-       /* public async Task<Combo> BuscarConDetalles(int Id)
+        public async Task<Combo> BuscarConDetalles(int Id)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
             return await context.Combo
                 .Include(t => t.ComboDetalle)
-                .ThenInclude(td => td.Articulo)
+                .ThenInclude(td => td.ArticuloId)
                 .FirstOrDefaultAsync(t => t.ComboId == Id);
-        }*/
+        }
 
 
 

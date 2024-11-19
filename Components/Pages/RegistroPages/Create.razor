@@ -1,5 +1,4 @@
 ﻿@page "/Combo/Create"
-@using FreimyHidalgo_AP1_P2.Components.Pages.RegistroPages
 @rendermode InteractiveServer
 @inject ComboService comboService
 @inject ComboDetalleService comboDetalleService
@@ -14,12 +13,12 @@
     <div class="container">
         <div class="card shadow-lg">
             <div class="card-header text-center">
-                <h1><strong>Crear cotizacion</strong></h1>
+                <h1><strong>Crear Combo</strong></h1>
             </div>
             <div class="card-body">
 
-                <label class="form-label" for="ClienteId"><strong>Cliente ID:</strong></label>
-                <InputNumber id="ClienteId" class="form-control" @bind-Value="Combo.ComboId" readonly></InputNumber>
+                <label class="form-label" for="ClienteId"><strong>Combo ID:</strong></label>
+                <InputNumber id="ComboId" class="form-control" @bind-Value="Combo.ComboId" readonly></InputNumber>
 
                 <label class="form-label" for="Fecha"><strong>Fecha:</strong></label>
                 <InputDate id="Fecha" class="form-control" @bind-Value="Combo.Fecha"></InputDate>
@@ -43,7 +42,7 @@
                         </div>
 
                         <div class="border border-success p-3 mt-3">
-                            <h3>Cliente Detalles</h3>
+                            <h3>Combo Detalles</h3>
 
 
                             <SeleccionarArticuloPicker ListaArticulo="articuloList"
@@ -124,13 +123,13 @@
 
    private async Task AgregarProducto((Articulos articulo, int Cantidad) selection)
     {
-      /*  var ProductoExistente = Articulos.ComboDetalle.FirstOrDefault(A => A.ProductoId == selection.articulo.ComboId);
-       * 
-        var comboDetalle = new ComboDetalle
+       /* var ProductoExistente = Articulos.ComboDetalle.FirstOrDefault(A => A.ProductoId == selection.articulo.ComboId);
+       
+        var ComboDetalle = new ComboDetalle
             {
                 ArticuloId = selection.articulo.ArticuloId,
-                cantidad = selection.Cantidad,
-                Costo = selection.articulo.costo;
+                Cantidad = selection.Cantidad,
+                Costo = selection.articulo.costo,
             };
         
         Combo.ComboDetalle.Add(comboDetalle);
@@ -146,22 +145,22 @@
 
         if (!Combo.ComboDetalle.Any())
         {
-            mensaje = "Debe agregar al menos un articulo";
+            toastService.Notify(new(ToastType.Primary, "Debe al menos seleccionar un articulo!"));
             return;
         }
         
-        toastService.Notify(new(ToastType.Primary, "Cliente guardado con exito!"));
+        toastService.Notify(new(ToastType.Primary, "Combo guardado con exito!"));
         var crear = await comboService.Guardar(Combo);
         Combo = new Combo();
 
         if (crear)
         {
             
-            navigation.NavigateTo("/Clientes/Index");
+            navigation.NavigateTo("/Combo/Index");
         }
         else
         {
-            toastService.Notify(new(ToastType.Danger, "Error al guaradr!"));
+            toastService.Notify(new(ToastType.Danger, "Error al guardar!"));
                
         }
        
