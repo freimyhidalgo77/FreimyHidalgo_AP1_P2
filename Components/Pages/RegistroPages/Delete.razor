@@ -20,10 +20,10 @@
 				<p><strong>Fecha:</strong>@combos?.Fecha.ToShortDateString()</p>
 			</div>
 			<div class="mb-1">
-				<p><strong>Nombre:</strong>@combos?.descripcion</p>
+				<p><strong>Descripcion:</strong>@combos?.descripcion</p>
 			</div>
 		<div class="mb-1">
-			<p><strong>Nombre:</strong>@combos?.precio</p>
+			<p><strong>Precio:</strong>@combos?.precio</p>
 		</div>
 	</div>
 
@@ -33,17 +33,16 @@
 				<tr>
 					<th>Articulo</th>
 					<th>Cantidad</th>
-					<th>Precio</th>
 				</tr>
 			</thead>
 			<tbody>
 				@foreach (var detalle in comboDetalle)
 				{
 					var productoDescripcion = articulo.FirstOrDefault(p => p.ArticuloId == detalle.ArticuloId)?.Descripcion ?? "No encontrado";
-					
+				<tr class="text-center">
 					<td>@detalle.Cantidad</td>
 					<td>@detalle.costo.ToString("C")</td>
-				
+			     </tr>
 
 				}
 			</tbody>
@@ -51,8 +50,9 @@
 	</div>
 
 	<div class="card-footer">
-		<button type="button" class="btn btn-danger bi bi-trash" @onclick="ElimnarCombo">Eliminar</button>
 		<button type="button" class="btn btn-info bi bi-arrow-90deg-left" @onclick=Volver> Volver</button>
+		<button type="button" class="btn btn-danger bi bi-trash" @onclick="ElimnarCombo"> Eliminar</button>
+		
 	</div>
 </div>
 </div>

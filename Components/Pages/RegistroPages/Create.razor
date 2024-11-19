@@ -92,7 +92,7 @@
                 </table>
             </div>
             <div class="card-footer">
-                <button type="button" class="btn btn-info text-white bi bi-90deg-left" @onclick=Volver>Volver</button>
+                <button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick=Volver> Volver</button>
                 <button type="submit" class="btn btn-success text-white bi bi-floppy-fill"> Crear</button>
 
 
@@ -145,8 +145,20 @@
 
         if (ProductoExistente != null)
         {
-            ProductoExistente.Cantidad += selection.Cantidad;
-            ProductoExistente.costo = ProductoExistente.Articulos.Precio * ProductoExistente.Cantidad;
+            if (ProductoExistente.Articulos != null)
+            {
+                ProductoExistente.Cantidad += selection.Cantidad;
+                ProductoExistente.costo = ProductoExistente.Articulos.Precio * ProductoExistente.Cantidad;
+            }
+            else
+            {
+                // En caso de que el articulo no se encuentre se muestra este mensaje:
+                mensaje = "El artículo relacionado no se encontro.";
+                await Task.Delay(3000); 
+                mensaje = string.Empty;
+                StateHasChanged(); 
+                return;
+            }
         }
         else
         {
@@ -161,9 +173,8 @@
 
         MontoCalculado();
         await Task.CompletedTask;
-
-
     }
+
 
 
 

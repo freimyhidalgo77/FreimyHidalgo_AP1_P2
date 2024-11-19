@@ -18,7 +18,7 @@
                 <option value="" disabled>Seleccionar</option>
                 <option value="ComboId">Registro ID</option>
                 <option value="descrpcion">Descripcion</option>
-              
+
             </InputSelect>
         </div>
 
@@ -57,7 +57,7 @@
                     <td class="text-center">@combo.Fecha</td>
                     <td class="text-center">@combo.descripcion</td>
                     <td class="text-center">@combo.precio</td>
-                    
+
                     <td>
                         @(combo.Vendido ? "Sí" : "No")
                     </td>
@@ -89,21 +89,29 @@
     {
         combos = await comboService.Listar(c => c.ComboId > 0);
 
-       
+
 
     }
 
-
-    private async Task Buscar()
+    public async Task Buscar()
     {
-        if (ValorFiltro.Trim() != "")
+        if (!string.IsNullOrWhiteSpace(ValorFiltro))
         {
-            if (filtro == "RegistroI")
+            switch (filtro)
             {
-                //   Registro = await registroService.Listar(e => e.Registro.NombreRegistro.ToLower().Contains(ValorFiltro.ToLower()));
+                case "ComboId":
+                    if (int.TryParse(ValorFiltro, out int id))
+                    {
+                        combos = await comboService.Listar(t => t.ComboId == id);
+                    }
+                    break;
+
+                case "descripcion":
+                    combos = await comboService.Listar(t => t.descripcion.ToLower().Contains(ValorFiltro.ToLower()));
+                    break;
+
+
             }
-
         }
-
     }
 }
