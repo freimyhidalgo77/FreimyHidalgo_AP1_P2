@@ -45,7 +45,7 @@
             {
                 if (ArticuloElegido.disponibilidad == null)
                 {
-                    toastService.Notify(new(ToastType.Primary, "Combi disponible"));
+                    toastService.Notify(new(ToastType.Danger, "Combo no disponible"));
                 }
                 else
                 {
@@ -55,7 +55,7 @@
             else
             {
 
-                toastService.Notify(new(ToastType.Primary, "Debe seleccionar un articulo!"));
+                toastService.Notify(new(ToastType.Warning, "Debe seleccionar un articulo!"));
             }
 
         }

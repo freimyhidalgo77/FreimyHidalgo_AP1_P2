@@ -11,7 +11,7 @@ namespace FreimyHidalgo_AP1_P2.Models
 
         [Required(ErrorMessage="Campo fecha obligatorio")]
 
-        public DateTime Fecha {  get; set; }
+        public DateTime Fecha {  get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "Campo descripcion obligatorio")]
         public string? descripcion { get; set; }
