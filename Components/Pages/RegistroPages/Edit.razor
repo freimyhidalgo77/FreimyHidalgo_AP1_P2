@@ -78,7 +78,7 @@
                         @foreach (var detalle in Combo.ComboDetalle)
                         {
                             <tr class="text-center">
-                                <td class="ps-3">@detalle.ComboId</td>
+                                <td class="ps-3">@detalle.ArticuloId</td>
                                 <td class="ps-3">@detalle.Cantidad</td>
                                 <td class="ps-3">@detalle.costo</td>
                                 <td class="ps-3">
@@ -94,7 +94,7 @@
             </div>
             <div class="card-footer">
                 <button type="button" class="btn btn-info bi bi-arrow-90deg-left" @onclick=Volver> Volver</button>
-                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill" @onclick=Modificar> Modificar</button>
+                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill"> Modificar</button>
 
             </div>
         </div>
@@ -181,7 +181,7 @@
         }
         else
         {
-            mensaje = "No se ha creado correctamente el combo";
+            toastService.Notify(new(ToastType.Danger, "Error al modificar!"));
         }
 
 
