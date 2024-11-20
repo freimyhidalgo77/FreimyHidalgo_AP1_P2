@@ -78,9 +78,9 @@ namespace FreimyHidalgo_AP1_P2.Migrations
                 columns: new[] { "ArticuloId", "Costo", "Descripcion", "Precio", "existencia" },
                 values: new object[,]
                 {
-                    { 1, 3400m, "Memoria RAM ", 1200m, 30 },
-                    { 2, 5000m, "Monitor ", 2000m, 19 },
-                    { 3, 4300m, "CPU ", 1250m, 10 }
+                    { 1, 3400m, "Memoria RAM ", 1200m, 55 },
+                    { 2, 5000m, "Monitor ", 2000m, 28 },
+                    { 3, 4300m, "CPU ", 1250m, 40 }
                 });
 
             migrationBuilder.CreateIndex(

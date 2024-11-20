@@ -53,7 +53,7 @@ namespace FreimyHidalgo_AP1_P2.Migrations
                             Costo = 3400m,
                             Descripcion = "Memoria RAM ",
                             Precio = 1200m,
-                            existencia = 30
+                            existencia = 55
                         },
                         new
                         {
@@ -61,7 +61,7 @@ namespace FreimyHidalgo_AP1_P2.Migrations
                             Costo = 5000m,
                             Descripcion = "Monitor ",
                             Precio = 2000m,
-                            existencia = 19
+                            existencia = 28
                         },
                         new
                         {
@@ -69,7 +69,7 @@ namespace FreimyHidalgo_AP1_P2.Migrations
                             Costo = 4300m,
                             Descripcion = "CPU ",
                             Precio = 1250m,
-                            existencia = 10
+                            existencia = 40
                         });
                 });
 
