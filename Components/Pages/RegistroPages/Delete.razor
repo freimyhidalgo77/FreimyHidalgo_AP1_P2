@@ -64,9 +64,9 @@
 
 	[Parameter]
 	public int ComboId { get; set; }
-	public Combo? combos;
-	public List<ComboDetalle> comboDetalle { get; set; } = new();
-	public List<Articulos> articulo { get; set; } = new();
+	public Combo1? combos;
+	public List<CombosDetalle> comboDetalle { get; set; } = new();
+	public List<Producto> articulo { get; set; } = new();
 	public string mensaje { get; set; } = string.Empty;
 
 	protected override Task OnInitializedAsync()

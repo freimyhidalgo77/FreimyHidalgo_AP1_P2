@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FreimyHidalgo_AP1_P2.Models
 {
-    public class Articulos
+    public class Producto
     {
 
         [Key]

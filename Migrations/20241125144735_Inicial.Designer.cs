@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FreimyHidalgo_AP1_P2.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20241120003412_Inicial")]
+    [Migration("20241125144735_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -25,7 +25,62 @@ namespace FreimyHidalgo_AP1_P2.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("FreimyHidalgo_AP1_P2.Models.Articulos", b =>
+            modelBuilder.Entity("FreimyHidalgo_AP1_P2.Models.Combo1", b =>
+                {
+                    b.Property<int>("ComboId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ComboId"));
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Vendido")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("precio")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("ComboId");
+
+                    b.ToTable("Combo1");
+                });
+
+            modelBuilder.Entity("FreimyHidalgo_AP1_P2.Models.CombosDetalle", b =>
+                {
+                    b.Property<int>("DetalleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DetalleId"));
+
+                    b.Property<int>("ArticuloId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ComboId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("costo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("DetalleId");
+
+                    b.HasIndex("ArticuloId");
+
+                    b.HasIndex("ComboId");
+
+                    b.ToTable("CombosDetalles");
+                });
+
+            modelBuilder.Entity("FreimyHidalgo_AP1_P2.Models.Producto", b =>
                 {
                     b.Property<int>("ArticuloId")
                         .ValueGeneratedOnAdd()
@@ -47,7 +102,7 @@ namespace FreimyHidalgo_AP1_P2.Migrations
 
                     b.HasKey("ArticuloId");
 
-                    b.ToTable("Articulo");
+                    b.ToTable("Producto");
 
                     b.HasData(
                         new
@@ -76,70 +131,15 @@ namespace FreimyHidalgo_AP1_P2.Migrations
                         });
                 });
 
-            modelBuilder.Entity("FreimyHidalgo_AP1_P2.Models.Combo", b =>
+            modelBuilder.Entity("FreimyHidalgo_AP1_P2.Models.CombosDetalle", b =>
                 {
-                    b.Property<int>("ComboId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ComboId"));
-
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Vendido")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("descripcion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("precio")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("ComboId");
-
-                    b.ToTable("Combo");
-                });
-
-            modelBuilder.Entity("FreimyHidalgo_AP1_P2.Models.ComboDetalle", b =>
-                {
-                    b.Property<int>("DetalleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DetalleId"));
-
-                    b.Property<int>("ArticuloId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Cantidad")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ComboId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("costo")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("DetalleId");
-
-                    b.HasIndex("ArticuloId");
-
-                    b.HasIndex("ComboId");
-
-                    b.ToTable("ComboDetalles");
-                });
-
-            modelBuilder.Entity("FreimyHidalgo_AP1_P2.Models.ComboDetalle", b =>
-                {
-                    b.HasOne("FreimyHidalgo_AP1_P2.Models.Articulos", "Articulos")
+                    b.HasOne("FreimyHidalgo_AP1_P2.Models.Producto", "Articulos")
                         .WithMany()
                         .HasForeignKey("ArticuloId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FreimyHidalgo_AP1_P2.Models.Combo", "Combos")
+                    b.HasOne("FreimyHidalgo_AP1_P2.Models.Combo1", "Combos")
                         .WithMany("ComboDetalle")
                         .HasForeignKey("ComboId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -150,7 +150,7 @@ namespace FreimyHidalgo_AP1_P2.Migrations
                     b.Navigation("Combos");
                 });
 
-            modelBuilder.Entity("FreimyHidalgo_AP1_P2.Models.Combo", b =>
+            modelBuilder.Entity("FreimyHidalgo_AP1_P2.Models.Combo1", b =>
                 {
                     b.Navigation("ComboDetalle");
                 });

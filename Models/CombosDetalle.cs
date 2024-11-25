@@ -4,19 +4,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FreimyHidalgo_AP1_P2.Models
 {
-    public class ComboDetalle
+    public class CombosDetalle
     {
         [Key]
         public int DetalleId { get; set; }
 
         [ForeignKey("Combo")]
         public int ComboId { get; set; }
-        public Combo? Combos { get; set; }
+        public Combo1? Combos { get; set; }
 
 
         [ForeignKey("Articulos")]
         public int ArticuloId { get; set; }
-        public  Articulos? Articulos { get; set; }
+        public  Producto? Articulos { get; set; }
 
 
         [Required(ErrorMessage = "Es obligatorio introducir una cantidad ")]

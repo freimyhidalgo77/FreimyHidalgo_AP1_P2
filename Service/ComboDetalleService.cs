@@ -11,10 +11,10 @@ namespace FreimyHidalgo_AP1_P2.Service
 
         private readonly Context _context;
 
-        public async Task<List<Articulos>> Listar(Expression<Func<Articulos, bool>> criterio)
+        public async Task<List<Producto>> Listar(Expression<Func<Producto, bool>> criterio)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Articulo.Where(criterio).ToListAsync();
+            return await context.Producto.Where(criterio).ToListAsync();
         }
 
      /*   public async Task<bool> Agregar(int articuloId, int cantidad)

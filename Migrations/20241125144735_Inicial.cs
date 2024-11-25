@@ -14,23 +14,7 @@ namespace FreimyHidalgo_AP1_P2.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Articulo",
-                columns: table => new
-                {
-                    ArticuloId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Costo = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    existencia = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Articulo", x => x.ArticuloId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Combo",
+                name: "Combo1",
                 columns: table => new
                 {
                     ComboId = table.Column<int>(type: "int", nullable: false)
@@ -42,11 +26,27 @@ namespace FreimyHidalgo_AP1_P2.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Combo", x => x.ComboId);
+                    table.PrimaryKey("PK_Combo1", x => x.ComboId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ComboDetalles",
+                name: "Producto",
+                columns: table => new
+                {
+                    ArticuloId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Costo = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    existencia = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Producto", x => x.ArticuloId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CombosDetalles",
                 columns: table => new
                 {
                     DetalleId = table.Column<int>(type: "int", nullable: false)
@@ -58,23 +58,23 @@ namespace FreimyHidalgo_AP1_P2.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ComboDetalles", x => x.DetalleId);
+                    table.PrimaryKey("PK_CombosDetalles", x => x.DetalleId);
                     table.ForeignKey(
-                        name: "FK_ComboDetalles_Articulo_ArticuloId",
-                        column: x => x.ArticuloId,
-                        principalTable: "Articulo",
-                        principalColumn: "ArticuloId",
+                        name: "FK_CombosDetalles_Combo1_ComboId",
+                        column: x => x.ComboId,
+                        principalTable: "Combo1",
+                        principalColumn: "ComboId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ComboDetalles_Combo_ComboId",
-                        column: x => x.ComboId,
-                        principalTable: "Combo",
-                        principalColumn: "ComboId",
+                        name: "FK_CombosDetalles_Producto_ArticuloId",
+                        column: x => x.ArticuloId,
+                        principalTable: "Producto",
+                        principalColumn: "ArticuloId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
-                table: "Articulo",
+                table: "Producto",
                 columns: new[] { "ArticuloId", "Costo", "Descripcion", "Precio", "existencia" },
                 values: new object[,]
                 {
@@ -84,13 +84,13 @@ namespace FreimyHidalgo_AP1_P2.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComboDetalles_ArticuloId",
-                table: "ComboDetalles",
+                name: "IX_CombosDetalles_ArticuloId",
+                table: "CombosDetalles",
                 column: "ArticuloId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComboDetalles_ComboId",
-                table: "ComboDetalles",
+                name: "IX_CombosDetalles_ComboId",
+                table: "CombosDetalles",
                 column: "ComboId");
         }
 
@@ -98,13 +98,13 @@ namespace FreimyHidalgo_AP1_P2.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ComboDetalles");
+                name: "CombosDetalles");
 
             migrationBuilder.DropTable(
-                name: "Articulo");
+                name: "Combo1");
 
             migrationBuilder.DropTable(
-                name: "Combo");
+                name: "Producto");
         }
     }
 }

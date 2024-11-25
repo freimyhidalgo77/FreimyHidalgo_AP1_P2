@@ -112,12 +112,12 @@
 
 @code {
 
-    public Combo Combo { get; set; } = new Combo();
-    public List<Combo> comboList { get; set; } = new List<Combo>();
-    public ComboDetalle ComboDetalle { get; set; } = new ComboDetalle();
-    public List<ComboDetalle> comboDetalleList { get; set; } = new List<ComboDetalle>();
-    public List<Articulos> articuloList { get; set; } = new List<Articulos>();
-    public Articulos Articulos { get; set; } = new Articulos();
+    public Combo1 Combo { get; set; } = new Combo1();
+    public List<Combo1> comboList { get; set; } = new List<Combo1>();
+    public CombosDetalle ComboDetalle { get; set; } = new CombosDetalle();
+    public List<CombosDetalle> comboDetalleList { get; set; } = new List<CombosDetalle>();
+    public List<Producto> articuloList { get; set; } = new List<Producto>();
+    public Producto Articulos { get; set; } = new Producto();
     public decimal Total { get; set; }
     public string mensaje { get; set; } = string.Empty;
 
@@ -139,7 +139,7 @@
 
 
 
-    private async Task AgregarProducto((Articulos articulo, int Cantidad) selection)
+    private async Task AgregarProducto((Producto articulo, int Cantidad) selection)
     {
         var ProductoExistente = Combo.ComboDetalle.FirstOrDefault(A => A.ArticuloId == selection.articulo.ArticuloId);
 
@@ -162,7 +162,7 @@
         }
         else
         {
-            var ComboDetalle = new ComboDetalle
+            var ComboDetalle = new CombosDetalle
                 {
                     ArticuloId = selection.articulo.ArticuloId,
                     Cantidad = selection.Cantidad,
@@ -190,7 +190,7 @@
         
         toastService.Notify(new(ToastType.Success, "Combo guardado", "El combo se ha guardado con exito!"));
         var crear = await comboService.Guardar(Combo);
-        Combo = new Combo();
+        Combo = new Combo1();
 
         if (crear)
         {
@@ -207,7 +207,7 @@
     }
 
 
-    public void RemoverDetalle(ComboDetalle detalle)
+    public void RemoverDetalle(CombosDetalle detalle)
     {
         Combo.ComboDetalle.Remove(detalle);
         Combo.ComboId = detalle.ComboId;

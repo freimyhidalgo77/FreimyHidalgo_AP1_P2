@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FreimyHidalgo_AP1_P2.Models
 {
-    public class Combo
+    public class Combo1
     {
         [Key]
         public int ComboId { get; set; }
@@ -23,7 +23,7 @@ namespace FreimyHidalgo_AP1_P2.Models
 
         [ForeignKey("ComboId")]
 
-        public ICollection<ComboDetalle> ComboDetalle { get; set; } = new List<ComboDetalle>();
+        public ICollection<CombosDetalle> ComboDetalle { get; set; } = new List<CombosDetalle>();
 
 
     }

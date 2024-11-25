@@ -10,19 +10,19 @@ namespace FreimyHidalgo_AP1_P2.DAL
             {
 
             }
-            public DbSet<Combo> Combo { get; set; }
-            public DbSet<ComboDetalle> ComboDetalles { get; set; }
-            public DbSet<Articulos> Articulo { get; set; }
+            public DbSet<Combo1> Combo1 { get; set; }
+            public DbSet<CombosDetalle> CombosDetalles { get; set; }
+            public DbSet<Producto> Producto { get; set; }
 
 
             protected override void OnModelCreating(ModelBuilder modelBuilder)
             {
                 base.OnModelCreating(modelBuilder);
-                modelBuilder.Entity<Articulos>().HasData(new List<Articulos>()
+                modelBuilder.Entity<Producto>().HasData(new List<Producto>()
         {
-            new Articulos(){ArticuloId=1, Descripcion= "Memoria RAM " ,Precio= 1200, Costo = 3400, existencia = 55},
-            new Articulos(){ArticuloId=2, Descripcion= "Monitor ",Precio= 2000, Costo = 5000, existencia = 28 }, 
-            new Articulos(){ArticuloId=3, Descripcion= "CPU ",Precio= 1250, Costo = 4300, existencia = 40 },
+            new Producto(){ArticuloId=1, Descripcion= "Memoria RAM " ,Precio= 1200, Costo = 3400, existencia = 55},
+            new Producto(){ArticuloId=2, Descripcion= "Monitor ",Precio= 2000, Costo = 5000, existencia = 28 }, 
+            new Producto(){ArticuloId=3, Descripcion= "CPU ",Precio= 1250, Costo = 4300, existencia = 40 },
 
         });
             }

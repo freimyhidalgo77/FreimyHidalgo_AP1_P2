@@ -27,7 +27,7 @@
 
 @code {
     [Parameter]
-    public List<Articulos> ListaArticulo { get; set; } = [];
+    public List<Producto> ListaArticulo { get; set; } = [];
 
     [Parameter]
     public int ArticuloId { get; set; }
@@ -39,7 +39,7 @@
     public decimal Precio { get; set; }
 
     [Parameter]
-    public EventCallback<(Articulos articulo, int Cantidad)> ArticuloSeleccionado { get; set; }
+    public EventCallback<(Producto articulo, int Cantidad)> ArticuloSeleccionado { get; set; }
 
     public string mensaje { get; set; } = string.Empty;
 
