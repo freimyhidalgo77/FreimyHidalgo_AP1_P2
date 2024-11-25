@@ -4,6 +4,7 @@ using FreimyHidalgo_AP1_P2.DAL;
 using System.Linq.Expressions;
 
 
+
 namespace FreimyHidalgo_AP1_P2.Service
 {
     public class ComboDetalleService(IDbContextFactory<Context> DbFactory)
@@ -17,24 +18,20 @@ namespace FreimyHidalgo_AP1_P2.Service
             return await context.Producto.Where(criterio).ToListAsync();
         }
 
-     /*   public async Task<bool> Agregar(int articuloId, int cantidad)
+        public async Task<bool> Eliminar(int detalleId)
         {
             await using var contexto = await DbFactory.CreateDbContextAsync();
-            if (cantidad <= 0)
+            var detalle = await contexto.CombosDetalles.FindAsync(detalleId);
+            if (detalle != null)
             {
-                throw new ArgumentException("Error, la cantidad debe ser mayor que cero.");
-            }
-
-            var articulo = await contexto.Articulo.FindAsync(articuloId);
-
-            if (articulo != null)
-            {
-                contexto.Articulo.Update(articulo);
+               
+                contexto.CombosDetalles.Remove(detalle);
                 await contexto.SaveChangesAsync();
                 return true;
             }
             return false;
-        }*/
+        }
+
 
     }
 }

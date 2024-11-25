@@ -117,6 +117,7 @@
     public Producto Articulos { get; set; } = new Producto();
     public decimal Total { get; set; }
     public string mensaje { get; set; } = string.Empty;
+    //public List<CombosDetalle> detallesEliminados { get; set; } = new List<CombosDetalle>();
 
 
 
@@ -169,6 +170,7 @@
             mensaje = "Debe agregar al menos un articulo";
             return;
         }
+
        
         toastService.Notify(new(ToastType.Primary, "Combo modificado", "Se ha modificado el combo correctamente!"));
         var crear = await comboService.Guardar(Combo);
@@ -188,12 +190,14 @@
     }
 
 
-    public void RemoverDetalle(CombosDetalle detalle)
+    public async void RemoverDetalle(CombosDetalle detalle)
     {
         Combo.ComboDetalle.Remove(detalle);
         Combo.ComboId = detalle.ComboId;
         ComboDetalle.Cantidad = detalle.Cantidad;
-        ComboDetalle.costo = detalle.costo;
+        ComboDetalle.costo = detalle.costo;   
+        var resultado = await comboDetalleService.Eliminar(detalle.DetalleId);
+        
     }
 
     public void Volver()
